@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react"
+    },
+    "files": [
+        "./typings/index.d.ts",
+        "./typings/prismic.io.d.ts",
+        "./src/Doc.tsx",
+        "./src/Editor.tsx",
+        "./src/DocumentList.tsx",
+        "./src/index.tsx"
+    ]
+}
