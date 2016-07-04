@@ -5,7 +5,10 @@ import * as ReactDOM from 'react-dom';
 import { Prismic } from 'prismic.io';
 import DocumentListContainer from './DocumentList';
 import Doc from './Doc';
-import Editor from './Editor';
+import * as Codemirror from 'react-codemirror';
+
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/lib/codemirror.css';
 
 // Update these 2 constants to point to your repository
 const endpoint = 'https://blogtemplate.prismic.io/api';
@@ -20,23 +23,49 @@ interface HomeProps {
   endpoint: string
 }
 
-interface HomeState { api: any }
+interface HomeState {
+  code?: string,
+  api?: any
+}
 
 class Home extends React.Component<HomeProps, HomeState> {
+
   constructor(props: HomeProps) {
     super(props);
-    this.state = { api: null };
+    this.state = {
+      api: null,
+      code: 'var foo = 3;'
+    };
   }
+
   componentDidMount() {
     Prismic.api(this.props.endpoint).then((api: any) => this.setState({api: api}));
   }
+
+  updateCode(newCode: string) {
+    this.setState({
+      code: newCode
+    })
+  }
+
+  run() {
+    eval(this.state.code);
+  }
+
   render() {
     if (!this.state.api) {
       return (<div>Loading...</div>);
     }
     return (
       <div>
-        <Editor/>
+        <Codemirror
+          value={this.state.code}
+          onChange={this.updateCode.bind(this)}
+          options={{
+            lineNumbers: true
+          }}
+          />
+        <input type='submit' onClick={this.run.bind(this)}/>
         <DocumentListContainer
                 api={this.state.api}
                 endpoint={this.props.endpoint}
@@ -46,6 +75,7 @@ class Home extends React.Component<HomeProps, HomeState> {
         </div>
     );
   }
+
 }
 
 function DocWrapper(props: any) {
@@ -60,8 +90,6 @@ export function init(element: any, options: any) {
   return ReactDOM.render(<Home endpoint={options.endpoint}/>, element);
 }
 
-/*
-ReactDOM.render((
-  <Home/>
-), document.querySelector('#myApp'));
-*/
+export function display(docs: any) {
+
+}

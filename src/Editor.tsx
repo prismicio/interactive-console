@@ -5,7 +5,6 @@ import * as ReactDOM from 'react-dom';
 import * as Codemirror from 'react-codemirror';
 
 import 'codemirror/mode/javascript/javascript';
-
 import 'codemirror/lib/codemirror.css';
 
 interface EditorProps {}
@@ -26,6 +25,10 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
     this.setState({
       code: newCode
     });
+  }
+
+  run() {
+    eval(this.state.code);
   }
 
   render() {
