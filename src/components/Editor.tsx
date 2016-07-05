@@ -3,7 +3,6 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import * as Codemirror from 'react-codemirror';
-import { Prismic } from 'prismic.io';
 
 import { SNIPPETS } from '../snippets';
 import { SnippetsComponent } from './Snippets';
