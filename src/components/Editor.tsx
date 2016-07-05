@@ -2,8 +2,7 @@ import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import * as Codemirror from 'react-codemirror';
 
-import { SNIPPETS } from '../snippets';
-import { SnippetsComponent } from './Snippets';
+import { Snippets } from './Snippets';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
@@ -58,7 +57,9 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
             lineNumbers: true
           }}
         />
-        <SnippetsComponent snippets={SNIPPETS} onClick={this.onSnippetClick.bind(this)}/>
+        <Snippets onClick={this.onSnippetClick.bind(this)}
+          docIds={['VZ_fZiEAAGEFLk63', 'VVtUnCUAACUAdoh1']}
+        />
       </div>
       <input type='submit' onClick={this.run.bind(this)}/>
     </div>);
