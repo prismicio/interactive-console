@@ -12,7 +12,9 @@
         "./typings/index.d.ts",
         "./typings/prismic.io.d.ts",
         "./src/components/Editor.tsx",
-        "./src/DocumentList.tsx",
+        "./src/components/DocumentList.tsx",
+        "./src/components/Snippets.tsx",
+        "./src/snippets.tsx",
         "./src/index.tsx"
     ]
 }

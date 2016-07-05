@@ -1,0 +1,11 @@
+.prismic-editor {
+  display: flex;
+}
+
+.prismic-editor .ReactCodeMirror {
+  flex: 2;
+}
+
+.prismic-editor ul {
+  flex: 1;
+}

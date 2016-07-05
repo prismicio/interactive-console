@@ -5,6 +5,9 @@ import * as ReactDOM from 'react-dom';
 import * as Codemirror from 'react-codemirror';
 import { Prismic } from 'prismic.io';
 
+import { SNIPPETS } from '../snippets';
+import { SnippetsComponent } from './Snippets';
+
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
 
@@ -32,26 +35,32 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
     });
   }
 
+  onSnippetClick(newCode: string) {
+    this.updateCode(newCode);
+  }
+
   fullCode() {
-    return 'PrismicConsole.prismic.api("' + this.props.endpoint + '").then(function(api) {'
-      + 'return ' + this.state.code
-      + '});';
+    return `PrismicConsole.prismic.api('${this.props.endpoint}').then(function(api) {\
+  return ${this.state.code}\
+});`;
   }
 
   run() {
-    console.log(this.fullCode());
     eval(this.fullCode());
   }
 
   render() {
     return (<div>
-      <Codemirror
-        value={this.state.code}
-        onChange={this.updateCode.bind(this)}
-        options={{
-          lineNumbers: true
-        }}
-      />
+      <div className="prismic-editor">
+        <Codemirror
+          value={this.state.code}
+          onChange={this.updateCode.bind(this)}
+          options={{
+            lineNumbers: true
+          }}
+        />
+        <SnippetsComponent snippets={SNIPPETS} onClick={this.onSnippetClick.bind(this)}/>
+      </div>
       <input type='submit' onClick={this.run.bind(this)}/>
     </div>);
   }

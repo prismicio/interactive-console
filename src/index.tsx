@@ -2,9 +2,13 @@
 
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
-import Editor from './components/Editor';
-import DocumentList from './DocumentList';
 import { Prismic } from 'prismic.io';
+
+import Editor from './components/Editor';
+import DocumentList from './components/DocumentList';
+import { SNIPPETS } from './snippets';
+
+import './css/main.css'
 
 interface HomeProps {
   endpoint: string
@@ -31,8 +35,9 @@ class Home extends React.Component<HomeProps, HomeState> {
 
   render() {
     return (<div>
-    <Editor endpoint={this.props.endpoint}/>
-    <DocumentList docs={this.state.docs}/>
+      Endpoint: <a href={this.props.endpoint}>{this.props.endpoint}</a>
+      <Editor endpoint={this.props.endpoint}/>
+      <DocumentList docs={this.state.docs}/>
     </div>);
   }
 
@@ -45,8 +50,12 @@ export function init(element: any, options: any) {
   return home;
 }
 
-export function display(docs: Array<any>) {
-  console.log('Got that: ', docs);
+export function display(docs: any) {
+  if (!docs) {
+    docs = [];
+  } else if (docs.constructor !== Array) {
+    docs = [docs];
+  }
   home.setDocs(docs);
 }
 
