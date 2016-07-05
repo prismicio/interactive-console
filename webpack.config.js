@@ -7,6 +7,7 @@ module.exports = {
   entry: [
     './src/index.tsx'
   ],
+  devtool: 'source-map',
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
@@ -73,13 +74,6 @@ module.exports = {
 /*  externals: {
     "react": "React",
     "react-dom": "ReactDOM"
-  },*/
-/*  devServer: {
-    contentBase: './public',
-    historyApiFallback: true,
-    noInfo: true,
-    hot: true,
-    inline: true
   },*/
   plugins: [
     new webpack.NoErrorsPlugin()
