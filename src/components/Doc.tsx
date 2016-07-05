@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Prismic } from 'prismic.io';
 
 interface DocProps {
   doc: any,

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Prismic } from 'prismic.io';
 
 import { Doc } from './Doc';
 
