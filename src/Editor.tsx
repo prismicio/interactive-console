@@ -21,7 +21,9 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
   constructor(props: EditorProps) {
     super(props);
     this.state = {
-      code: 'api.query("")'
+      code: "api.query('').then(function(results) {\n"
+         + "   console.log('Results: ', results);\n"
+         + "});"
     }
   }
 
