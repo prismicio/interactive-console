@@ -1,5 +1,3 @@
-'use strict';
-
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import * as Codemirror from 'react-codemirror';
@@ -11,7 +9,8 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
 
 interface EditorProps {
-  endpoint: string
+  endpoint: string,
+  loading: {(): void}
 }
 interface EditorState {
   code: string
@@ -45,6 +44,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   run() {
+    this.props.loading();
     eval(this.fullCode());
   }
 

@@ -1,5 +1,3 @@
-'use strict';
-
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import { Prismic } from 'prismic.io';
@@ -15,6 +13,7 @@ interface HomeProps {
 }
 
 interface HomeState {
+  loading: boolean,
   docs: Array<any>
 }
 
@@ -23,21 +22,30 @@ class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps) {
     super(props);
     this.state = {
+      loading: false,
       docs: []
     };
   }
 
   setDocs(docs: Array<any>) {
     this.setState({
+      loading: false,
       docs: docs
-    })
+    });
+  }
+
+  loading() {
+    this.setState({
+      loading: true,
+      docs: []
+    });
   }
 
   render() {
     return (<div>
       Endpoint: <a href={this.props.endpoint}>{this.props.endpoint}</a>
-      <Editor endpoint={this.props.endpoint}/>
-      <DocumentList docs={this.state.docs}/>
+      <Editor endpoint={this.props.endpoint} loading={this.loading.bind(this)}/>
+      <DocumentList docs={this.state.docs} loading={this.state.loading}/>
     </div>);
   }
 
