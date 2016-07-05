@@ -12,8 +12,7 @@ interface EditorProps {
   endpoint: string
 }
 interface EditorState {
-  api?: any,
-  code?: string
+  code: string
 }
 
 export default class Editor extends React.Component<EditorProps, EditorState> {
@@ -21,14 +20,10 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
   constructor(props: EditorProps) {
     super(props);
     this.state = {
-      code: "api.query('').then(function(results) {\n"
-         + "   console.log('Results: ', results);\n"
+      code: "api.query('').then(function(response) {\n"
+         + "   PrismicConsole.display(response.results);\n"
          + "});"
     }
-  }
-
-  componentDidMount() {
-    Prismic.api(this.props.endpoint).then((api: any) => this.setState({api: api}));
   }
 
   updateCode(newCode: string) {
@@ -49,9 +44,6 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   render() {
-    if (!this.state.api) {
-      return (<div>Loading...</div>);
-    }
     return (<div>
       <Codemirror
         value={this.state.code}

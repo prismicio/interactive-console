@@ -10,8 +10,7 @@
     "files": [
         "./typings/index.d.ts",
         "./typings/prismic.io.d.ts",
-        "./src/Doc.tsx",
-        "./src/Editor.tsx",
+        "./src/components/Editor.tsx",
         "./src/DocumentList.tsx",
         "./src/index.tsx"
     ]

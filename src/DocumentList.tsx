@@ -6,8 +6,6 @@ interface LinkResolverFunc {
 }
 
 export interface DocumentListProps {
-  endpoint: string,
-  linkResolver: LinkResolverFunc,
   docs: Array<any>
 }
 
@@ -23,37 +21,4 @@ class DocumentList extends React.Component<DocumentListProps, {}> {
   }
 }
 
-export interface DocumentListContainerProps {
-  api: any
-  endpoint: string,
-  accesstoken?: string,
-  linkResolver: LinkResolverFunc,
-  q?: string // Prismic query
-}
-
-export interface DocumentListContainerState {
-  docs: Array<any>
-}
-
-class DocumentListContainer extends React.Component<DocumentListContainerProps, DocumentListContainerState> {
-
-  constructor(props: DocumentListContainerProps) {
-    super(props);
-    this.state = { docs: [] };
-  }
-
-  componentDidMount() {
-    console.log("component will mount!");
-    this.props.api.form('everything').ref(this.props.api.master()).submit((err: any, res: any) => {
-      this.setState({docs: res.results});
-    });
-  }
-
-  render() {
-    console.log("Render doclistcont");
-    return <DocumentList endpoint={this.props.endpoint} docs={this.state.docs} linkResolver={this.props.linkResolver} />;
-  }
-
-}
-
-export default DocumentListContainer;
+export default DocumentList;
