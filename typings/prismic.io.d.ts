@@ -12,10 +12,18 @@ declare namespace PrismicIO {
   }
 
   // TODO
-  type Response = any
-
-  // TODO
   type Document = any
+
+  interface Response {
+    page: number;
+    results_per_page: number;
+    results_size: number;
+    total_results_size: number;
+    total_pages: number;
+    next_page: string;
+    prev_page: string;
+    results: Array<Document>
+  }
 
   interface Api {
     accessToken?: string;
