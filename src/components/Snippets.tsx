@@ -6,7 +6,7 @@ interface SnippetSelectorProps {
   values: Array<string>
 }
 
-class SnippetSelector extends React.Component<Sni, {}> {
+class SnippetSelector extends React.Component<SnippetSelectorProps, {}> {
 
 }
 
@@ -14,7 +14,7 @@ interface SnippetProps {
   title: string;
   template: string;
   onClick: { (code: string): void };
-  variables?: Object;
+  variables?: { [label: string]: Array<any>; };
 }
 
 class Snippet extends React.Component<SnippetProps, {}> {
@@ -31,10 +31,15 @@ class Snippet extends React.Component<SnippetProps, {}> {
     let title: any;
     if (this.props.variables) {
       let selector = Object.keys(this.props.variables).map((key: string) => {
-        <
+        return (<select>
+        {this.props.variables[key].map((value: any) =>
+            <option value={value}>{value}</option>
+        )}
+        </select>);
       });
       title = (<h4>
         {this.props.title}
+        {selector}
       </h4>);
     } else {
       title = (<h4>{this.props.title}</h4>);
@@ -67,20 +72,10 @@ export class Snippets extends React.Component<SnippetsProps, {}> {
       <Snippet
         onClick={this.props.onClick}
         title='By ID'
-        template="api.getByID('<docid>').then(function(doc) {\n   PrismicConsole.display(doc);\n});"
         variables={{docid: this.props.docIds}}
+        template="api.getByID('<docid>').then(function(doc) {\n   PrismicConsole.display(doc);\n});"
         />
     </div>);
   }
 
 }
-/*
-  {
-    label: 'All documents',
-    code: "api.query('').then(function(response) {\n   PrismicConsole.display(response.results);\n});"
-  },
-  {
-    label: 'By ID',
-    code: "api.getByID('<docid>').then(function(doc) {\n   PrismicConsole.display(doc);\n});"
-  }
-  */
