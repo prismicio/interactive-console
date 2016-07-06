@@ -1,12 +1,30 @@
+import * as _ from "lodash";
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 
+interface Dictionary<T> {
+  [index: string]: T;
+}
+
 interface SnippetSelectorProps {
-  key: string,
-  values: Array<string>
+  skey: string;
+  values: Array<string>;
+  onChange: { (key: string, value: string): void };
 }
 
 class SnippetSelector extends React.Component<SnippetSelectorProps, {}> {
+
+  change(event: any) {
+    this.props.onChange(this.props.skey, event.target.value);
+  }
+
+  render() {
+    return (<select onChange={this.change.bind(this)}>
+      {this.props.values.map((value: any) =>
+        <option key={value} value={value}>{value}</option>
+      )}
+    </select>);
+  }
 
 }
 
@@ -14,29 +32,66 @@ interface SnippetProps {
   title: string;
   template: string;
   onClick: { (code: string): void };
-  variables?: { [label: string]: Array<any>; };
+  variables?: Dictionary<string[]>;
 }
 
-class Snippet extends React.Component<SnippetProps, {}> {
+interface SnippetState {
+  selectorValues: Dictionary<string>;
+}
+
+function headsOnly(input: Dictionary<string[]>): Dictionary<string> {
+  let result: Dictionary<string> = {};
+  Object.keys(input).map((key) => {
+    result[key] = input[key][0];
+  });
+  return result;
+}
+
+class Snippet extends React.Component<SnippetProps, SnippetState> {
+
+  constructor(props: SnippetProps) {
+    super(props);
+    this.state = {
+      selectorValues: props.variables ? headsOnly(props.variables): {}
+    };
+  }
+
+  componentWillReceiveProps(nextProps: SnippetProps) {
+    this.setState({
+      selectorValues: nextProps.variables ? headsOnly(nextProps.variables): {}
+    });
+  }
 
   code() {
-    return this.props.template
+    console.log("Build code with ", this.state.selectorValues);
+    let result = this.props.template;
+    if (this.state && this.state.selectorValues) {
+      Object.keys(this.state.selectorValues).map((key) => {
+        result = result.replace(`<${key}>`, this.state.selectorValues[key]);
+      });
+    }
+    return result;
   }
 
   onclick(e: any) {
     this.props.onClick(this.code());
   }
 
+  onVariableChange(key: string, value: string) {
+    let sValues: { [label: string]: string; } = _.clone(this.state.selectorValues);
+    sValues[key] = value;
+    this.setState({
+      selectorValues: sValues
+    });
+  }
+
   render() {
     let title: any;
+    const code = this.code();
     if (this.props.variables) {
-      let selector = Object.keys(this.props.variables).map((key: string) => {
-        return (<select>
-        {this.props.variables[key].map((value: any) =>
-            <option value={value}>{value}</option>
-        )}
-        </select>);
-      });
+      let selector = Object.keys(this.props.variables).map((key: string) =>
+        <SnippetSelector onChange={this.onVariableChange.bind(this)} key={key} skey={key} values={this.props.variables[key]}/>
+      );
       title = (<h4>
         {this.props.title}
         {selector}
@@ -47,7 +102,7 @@ class Snippet extends React.Component<SnippetProps, {}> {
     return (
       <div onClick={this.onclick.bind(this)}>
         {title}
-        <pre>{this.props.template}</pre>
+        <pre>{code}</pre>
       </div>
     );
   }

@@ -2,6 +2,7 @@
   "globalDependencies": {
     "codemirror": "registry:dt/codemirror#0.0.0+20160619021621",
     "history": "registry:dt/history#1.8.0+20160316155526",
+    "lodash": "registry:dt/lodash#3.10.0+20160619033623",
     "react": "registry:dt/react#0.14.0+20160630100702",
     "react-codemirror": "registry:dt/react-codemirror#0.2.6+20160619021621",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040"
