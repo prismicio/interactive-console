@@ -9,13 +9,16 @@ import { Snippets } from './Snippets';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
 
+interface Dictionary<T> { [index: string]: T; }
+
 interface EditorProps {
   endpoint: string,
-  loading: {(): void}
+  loading: {(): void},
 }
 interface EditorState {
   code?: string;
-  ids?: Array<string>; // Some ids to use as default value in snippets
+  bookmarks?: Dictionary<string>;
+  types?: Dictionary<string>;
 }
 
 export default class Editor extends React.Component<EditorProps, EditorState> {
@@ -28,12 +31,15 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
          + "});"
     }
     Prismic.api(this.props.endpoint).then((api: PrismicIO.Api) => {
-      let ids: Array<string> = [];
-      _.values(api.bookmarks).map((v: string) => {
-        ids.push(v)
+      // We need to revert bookmarks because we want the id as the key
+      let bookmarks: Dictionary<string> = {};
+      Object.keys(api.bookmarks).map((name) => {
+        let id = api.bookmarks[name];
+        bookmarks[id] = name;
       });
       this.setState({
-        ids: ids
+        bookmarks: bookmarks,
+        types: api.data.types
       });
     });
   }
@@ -70,7 +76,8 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
           }}
         />
         <Snippets onClick={this.onSnippetClick.bind(this)}
-          docIds={this.state.ids || []}
+          docIds={this.state.bookmarks || {}}
+          types={this.state.types || {}}
         />
       </div>
       <input type='submit' onClick={this.run.bind(this)}/>

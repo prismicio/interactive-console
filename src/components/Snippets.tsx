@@ -2,26 +2,24 @@ import * as _ from "lodash";
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 
-interface Dictionary<T> {
-  [index: string]: T;
-}
+interface Dictionary<T> { [index: string]: T; }
 
 interface SnippetSelectorProps {
   skey: string;
-  values: Array<string>;
-  onChange: { (key: string, value: string): void };
+  values: Dictionary<string>;
+  onChange: { (value: string): void };
 }
 
 class SnippetSelector extends React.Component<SnippetSelectorProps, {}> {
 
   change(event: any) {
-    this.props.onChange(this.props.skey, event.target.value);
+    this.props.onChange(event.target.value);
   }
 
   render() {
     return (<select onChange={this.change.bind(this)}>
-      {this.props.values.map((value: any) =>
-        <option key={value} value={value}>{value}</option>
+      {Object.keys(this.props.values).map((key: string) =>
+        <option key={key} value={key}>{this.props.values[key]}</option>
       )}
     </select>);
   }
@@ -32,42 +30,39 @@ interface SnippetProps {
   title: string;
   template: string;
   onClick: { (code: string): void };
-  variables?: Dictionary<string[]>;
+  variable?: string;
+  values?: Dictionary<string>;
 }
 
 interface SnippetState {
-  selectorValues: Dictionary<string>;
-}
-
-function headsOnly(input: Dictionary<string[]>): Dictionary<string> {
-  let result: Dictionary<string> = {};
-  Object.keys(input).map((key) => {
-    result[key] = input[key][0];
-  });
-  return result;
+  selected: string;
 }
 
 class Snippet extends React.Component<SnippetProps, SnippetState> {
 
   constructor(props: SnippetProps) {
     super(props);
-    this.state = {
-      selectorValues: props.variables ? headsOnly(props.variables): {}
-    };
+    if (props.values && Object.keys(props.values).length > 0) {
+      this.state = {
+        selected: Object.keys(props.values)[0]
+      };
+    } else {
+      this.state = { selected: null };
+    }
   }
 
   componentWillReceiveProps(nextProps: SnippetProps) {
-    this.setState({
-      selectorValues: nextProps.variables ? headsOnly(nextProps.variables): {}
-    });
+    if (!this.state.selected && nextProps.values && Object.keys(nextProps.values).length > 0) {
+      this.setState({
+        selected: Object.keys(nextProps.values)[0]
+      });
+    }
   }
 
   code() {
     let result = this.props.template;
-    if (this.state && this.state.selectorValues) {
-      Object.keys(this.state.selectorValues).map((key) => {
-        result = result.replace(`<${key}>`, this.state.selectorValues[key]);
-      });
+    if (this.state.selected) {
+      result = result.replace(this.props.variable, this.state.selected);
     }
     return result;
   }
@@ -76,24 +71,23 @@ class Snippet extends React.Component<SnippetProps, SnippetState> {
     this.props.onClick(this.code());
   }
 
-  onVariableChange(key: string, value: string) {
-    let sValues: { [label: string]: string; } = _.clone(this.state.selectorValues);
-    sValues[key] = value;
+  onVariableChange(value: string) {
     this.setState({
-      selectorValues: sValues
+      selected: value
     });
   }
 
   render() {
     let title: any;
     const code = this.code();
-    if (this.props.variables) {
-      let selector = Object.keys(this.props.variables).map((key: string) =>
-        <SnippetSelector onChange={this.onVariableChange.bind(this)} key={key} skey={key} values={this.props.variables[key]}/>
-      );
+    if (this.props.variable && this.props.values) {
       title = (<h4>
         {this.props.title}
-        {selector}
+        <SnippetSelector
+          onChange={this.onVariableChange.bind(this)}
+          key={this.props.variable}
+          skey={this.props.variable}
+          values={this.props.values}/>
       </h4>);
     } else {
       title = (<h4>{this.props.title}</h4>);
@@ -112,7 +106,8 @@ class Snippet extends React.Component<SnippetProps, SnippetState> {
 
 interface SnippetsProps {
   onClick: { (code: string): void };
-  docIds: Array<string>;
+  docIds: Dictionary<string>;
+  types: Dictionary<string>;
 }
 
 export class Snippets extends React.Component<SnippetsProps, {}> {
@@ -126,8 +121,16 @@ export class Snippets extends React.Component<SnippetsProps, {}> {
       <Snippet
         onClick={this.props.onClick}
         title='By ID'
-        variables={{docid: this.props.docIds}}
+        variable="<docid>"
+        values={this.props.docIds}
         template="api.getByID('<docid>').then(function(doc) {\n   PrismicConsole.display(doc);\n});"
+        />
+      <Snippet
+        onClick={this.props.onClick}
+        title='By type'
+        variable="<type>"
+        values={this.props.types}
+        template="api.query(Prismic.Predicates.at('document.type', '<type>'))\n   .then(function(res) {\n      PrismicConsole.display(res.results);\n   });"
         />
     </div>);
   }

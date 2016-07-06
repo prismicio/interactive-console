@@ -25,6 +25,9 @@ declare namespace PrismicIO {
     form: {(formId: string): any};
     master: {(): string};
     bookmarks: {[name: string]: string};
+    data: {
+      types: {[name: string]: string};
+    };
     ref: {(label: string): any};
     query: {(q: string, options?: Object, callback?: Callback): PromiseLike<Response>};
     getByID: {(id: string, options?: Object, callback?: Callback): PromiseLike<Document>};
