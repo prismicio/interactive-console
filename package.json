@@ -6,7 +6,6 @@
   "scripts": {
     "build": "webpack -p",
     "dev": "webpack-dev-server --progress --profile --colors --hot",
-    "lint": "eslint *.js *.jsx",
     "typings": "typings install",
     "postinstall": "npm run typings"
   },
@@ -25,7 +24,6 @@
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-react": "^6.5.0",
     "codemirror-javascript": "^0.2.0",
-    "eslint-plugin-react": "^4.2.3",
     "file-loader": "^0.8.5",
     "lodash": "^4.13.1",
     "node-libs-browser": "^1.0.0",
@@ -51,9 +49,6 @@
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-react": "^6.5.0",
     "css-loader": "^0.23.1",
-    "eslint": "^2.6.0",
-    "eslint-config-standard": "^5.1.0",
-    "eslint-plugin-react": "^4.2.3",
     "file-loader": "^0.8.5",
     "json-loader": "^0.5.4",
     "react-hot-loader": "^1.3.0",
