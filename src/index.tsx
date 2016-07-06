@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
-import { Prismic } from 'prismic.io';
+import * as Prismic from 'prismic.io';
 
 import Editor from './components/Editor';
 import DocumentList from './components/DocumentList';

@@ -1,9 +1,14 @@
 // Type definitions for prismic.io JS kit 3.1.3
+// Still very incomplete!
 
 declare namespace PrismicIO {
 
   interface Callback {
     (err: any, result: any): any
+  }
+
+  interface LinkResolver {
+    (doc: Document): string
   }
 
   // TODO
@@ -19,6 +24,7 @@ declare namespace PrismicIO {
     apiDataTTL: number;
     form: {(formId: string): any};
     master: {(): string};
+    bookmarks: {[name: string]: string};
     ref: {(label: string): any};
     query: {(q: string, options?: Object, callback?: Callback): PromiseLike<Response>};
     getByID: {(id: string, options?: Object, callback?: Callback): PromiseLike<Document>};
@@ -34,13 +40,9 @@ declare namespace PrismicIO {
     apiDataTTL?: number
   }
 
-  interface Prismic {
-    api: {(url: string, options?: ApiOptions): PromiseLike<Api>},
-    Predicates: any
-  }
-
 }
 
 declare module "prismic.io" {
-  export let Prismic: any;
+  const api: {(url: string, options?: PrismicIO.ApiOptions): PromiseLike<PrismicIO.Api>};
+  const Predicates: any
 }

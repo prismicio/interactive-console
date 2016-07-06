@@ -63,7 +63,6 @@ class Snippet extends React.Component<SnippetProps, SnippetState> {
   }
 
   code() {
-    console.log("Build code with ", this.state.selectorValues);
     let result = this.props.template;
     if (this.state && this.state.selectorValues) {
       Object.keys(this.state.selectorValues).map((key) => {

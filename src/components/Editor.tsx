@@ -1,6 +1,8 @@
+import * as _ from "lodash";
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import * as Codemirror from 'react-codemirror';
+import * as Prismic from 'prismic.io';
 
 import { Snippets } from './Snippets';
 
@@ -12,7 +14,8 @@ interface EditorProps {
   loading: {(): void}
 }
 interface EditorState {
-  code: string
+  code?: string;
+  ids?: Array<string>; // Some ids to use as default value in snippets
 }
 
 export default class Editor extends React.Component<EditorProps, EditorState> {
@@ -24,6 +27,15 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
          + "   PrismicConsole.display(response.results);\n"
          + "});"
     }
+    Prismic.api(this.props.endpoint).then((api: PrismicIO.Api) => {
+      let ids: Array<string> = [];
+      _.values(api.bookmarks).map((v: string) => {
+        ids.push(v)
+      });
+      this.setState({
+        ids: ids
+      });
+    });
   }
 
   updateCode(newCode: string) {
@@ -58,7 +70,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
           }}
         />
         <Snippets onClick={this.onSnippetClick.bind(this)}
-          docIds={['VZ_fZiEAAGEFLk63', 'VVtUnCUAACUAdoh1']}
+          docIds={this.state.ids || []}
         />
       </div>
       <input type='submit' onClick={this.run.bind(this)}/>
