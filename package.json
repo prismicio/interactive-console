@@ -6,7 +6,9 @@
   "scripts": {
     "build": "webpack -p",
     "dev": "webpack-dev-server --progress --profile --colors --hot",
-    "lint": "eslint *.js *.jsx"
+    "lint": "eslint *.js *.jsx",
+    "typings": "typings install",
+    "postinstall": "npm run typings"
   },
   "keywords": [
     "React",

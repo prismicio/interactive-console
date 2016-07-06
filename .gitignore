@@ -4,6 +4,8 @@ logs
 
 # Typescript
 dist/
+typings/*
+!typings/prismic.io.d.ts
 
 # Runtime data
 pids
