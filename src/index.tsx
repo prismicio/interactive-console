@@ -4,7 +4,6 @@ import * as Prismic from 'prismic.io';
 
 import Editor from './components/Editor';
 import DocumentList from './components/DocumentList';
-import { SNIPPETS } from './snippets';
 
 import './css/main.css'
 

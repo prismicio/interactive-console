@@ -15,7 +15,6 @@
         "./src/components/Doc.tsx",
         "./src/components/DocumentList.tsx",
         "./src/components/Snippets.tsx",
-        "./src/snippets.tsx",
         "./src/index.tsx"
     ]
 }
