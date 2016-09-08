@@ -1,5 +1,6 @@
 /*eslint-env node */
 
+require('es6-promise').polyfill();
 var webpack = require('webpack');
 var path = require('path');
 
